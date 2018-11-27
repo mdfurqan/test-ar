@@ -5,11 +5,6 @@ import './Nav.css';
 export const Nav = ({loggedIn, logout}) => (
   <nav>
     <ul>
-      <li>
-        <a className='logo' href={(loggedIn) ? '' : '/'}>
-          <h2>Table-AR</h2>
-        </a>
-      </li>
       {loggedIn ? (
         <li>
           <button type='button'

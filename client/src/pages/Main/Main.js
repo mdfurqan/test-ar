@@ -8,6 +8,10 @@ import { EntityElement }  from '../../components/Entity';
 import { AddBlock } from '../../components/AddBlock';
 import { SaveBtn } from '../../components/SaveBtn';
 import { ToDoListContainer } from '../../components/ToDoListContainer';
+import { VTBBoard } from '../../components/VTBBoard';
+import cards from '../../components/VTBBoard/data';
+import { VTBLane } from '../../components/VTBLane';
+import { VTBCard } from '../../components/VTBCard';
 import { ToDoListItem } from '../../components/ToDoListItems';
 import { CloseCube } from '../../components/CloseCube';
 import { CheckboxCube } from '../../components/CheckboxCube';
@@ -301,7 +305,7 @@ class Main extends Component {
               Modal Container
             ==============================================================================================*/}
               { this.state.listCreateModalIsVisible ?
-                <Entity id='listOfListsModalContainer'
+                (<Entity id='listOfListsModalContainer'
                         position='0 0.65 0' >
                   <Entity primitive='a-rounded'
                           position='-1.25 0.45 -2.95'
@@ -332,51 +336,14 @@ class Main extends Component {
                                events={{click: () => this.handleSaveListClick()}} />
                     </Entity>
                   </Entity>
-                </Entity> :
-                null
+                </Entity>) 
+                : null
               }
 
               {/*=============================================================================================
-                To Do List Container - List of lists
+                To Do List Container - List of lists (left side)
               ==============================================================================================*/}
-              <ToDoListContainer caption='Lists for User:'>
-                <AddBlock events={{click: () => this.handleAddListClick()}} />
-
-                <Entity id="userInFocusCaption"
-                        position='0 3.25 0'
-                        text={{
-                          color: 'white',
-                          align: 'center',
-                          value: this.props.username,
-                          opacity: 1,
-                          width: 4,
-                          side: 'double'
-                        }} />
-
-                {this.state.listsOfUser.length > 0 ?
-                  this.state.listsOfUser.map((list, index) =>
-                    <ToDoListItem class='clickable'
-                                  key={list._id}
-                                  id={list._id}
-                                  text={list.listTitle}
-                                  posY={`${3 - (0.5 * (index + 1))}`}
-                                  type='list'
-                                  events={{
-                                    click: () => this.handleSelectListClick
-                                  }} />
-                  ) : (
-                  <Entity position='0 2.5 0.5'
-                          text={{
-                            color: 'white',
-                            align: 'center',
-                            value: 'No lists created',
-                            opacity: 1,
-                            width: 4,
-                          }} />
-                  )
-                }
-
-              </ToDoListContainer>
+              
             </Entity>
 
             {/*=============================================================================================
@@ -423,48 +390,36 @@ class Main extends Component {
                 </Entity> : null
               }
 
+
+
+
               {/*=============================================================================================
-                To Do List Items Container
+                To Do List Items Container (right side)
             ==============================================================================================*/}
-              <ToDoListContainer caption='To Do List:' >
-                <AddBlock events={{click: () => this.handleAddListItemClick()}} />
-
-                <Entity id="listInFocusCaption"
-                        position='0 3.25 0'
-                        text={{
-                          color: 'white',
-                          align: 'center',
-                          value: this.state.listInFocusText,
-                          opacity: 1,
-                          width: 4,
-                          side: 'double'
-                        }} />
-
-                {this.state.listItemsOfList.map((listItem, index) => (
-                  <ToDoListItem className='toDoListItem'
-                                key={listItem._id}
-                                id={listItem._id}
-                                text={listItem.title}
-                                posY={`${3 - (0.5 * (index + 1))}`}
-                                events={{
-                                  click: () => console.log('list item clicked')
-                                }} >
-                    <CheckboxCube parentItemId={listItem._id}
-                                  events={{click: () => this.handleToggleDone}} >
-                      <Entity className='clickable'
-                              primitive='a-checkbox'
-                              scale='.9 .9 .9'
-                              position='-0.095 -0.01 0.096'
-                              width='.15'
-                              checked={listItem.complete}
-                              name={`checkbox${listItem._id}`} />
-                    </CheckboxCube>
-                    <CloseCube id={listItem._id}
-                               events={{click: () => this.handleDeleteListItem}}/>
-                  </ToDoListItem>
+            
+              <VTBBoard caption={this.state.listItemsOfList}>
+                {Array.apply(null, Array(5)).map((listItem, index) => (
+                  <VTBLane pos={{
+                    x: -4 + (index * 1.7),
+                    y: -0.0,
+                    z: 0.1
+                  }}>
+                    {
+                      getSomeCards(index, 5).slice(0, 5).map((card, cardIndex) => (
+                          <VTBCard pos={{
+                            x: 0,
+                            y: -2.2 + (cardIndex * 1.1),
+                            z: 0.1
+                          }}
+                          data={card}
+                          laneIndex={index}></VTBCard>
+                      ))
+                    }
+                  </VTBLane>
                 ))}
+              </VTBBoard>
 
-              </ToDoListContainer>
+
             </Entity>
 
             {/*=============================================================================================
@@ -491,6 +446,11 @@ class Main extends Component {
       );
     }
   }
+}
+
+function getSomeCards(index, perLane) {
+  const start = index * perLane;
+  return cards.slice(start, start + perLane);
 }
 
 export default Main;

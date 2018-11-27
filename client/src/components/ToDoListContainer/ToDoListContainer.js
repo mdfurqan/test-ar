@@ -5,13 +5,13 @@ export const ToDoListContainer = ({caption, children}) => (
   <Entity className='toDoListContainer'
           geometry={{
             primitive: 'box',
-            depth: 0.4,
+            depth: 0.1,
             height: 6,
-            width: 3
+            width: 10
           }}
           position='0 1 -5'
           material={{
-            color: '#222222',
+            color: '#ff0000',
             opacity: 0.3,
             side: 'double'
           }}
@@ -20,10 +20,10 @@ export const ToDoListContainer = ({caption, children}) => (
               primitive: 'box',
               depth: 0.3,
               height: 5.9,
-              width: 2.9
+              width: 7.9
             }}
             material={{
-              color: 'white',
+              color: 'blue',
               opacity: 0.3,
               side: 'double'
             }} />
