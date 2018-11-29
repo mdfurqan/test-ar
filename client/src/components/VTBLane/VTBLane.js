@@ -11,7 +11,7 @@ export const VTBLane = ({caption, children, pos}) => (
   position={pos}
   material={{
     color: '#696a6d',
-    opacity: 1,
+    opacity: 1.0,
     side: 'double'
   }}>
     {children}

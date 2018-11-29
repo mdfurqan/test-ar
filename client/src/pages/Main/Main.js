@@ -35,7 +35,8 @@ class Main extends Component {
       listInFocus: '',
       listInFocusText: 'none',
       username: null,
-      lizItems: blocks
+      lizItems: blocks,
+      cardEditDesc:""
     };
   }
 
@@ -186,49 +187,45 @@ class Main extends Component {
     // TODO: Need to fix QuerySelector
   };
 
-  handleAddListClick = () => {
+  handleAddListClick = (data,event) => {
+    debugger;
     this.setState({
       keyboardRotation: '0 60 0',
       listCreateModalIsVisible: true,
-      listItemCreateModalIsVisible: false
+      listItemCreateModalIsVisible: false,
+      cardEditDesc:data.label
     });
     document.querySelector('#listInputField').focus();
     // TODO: Need to fix QuerySelector
   };
 
-  handleSaveListItemClick = () => {
-    if (this.state.listItemTitleInputField.length > 0) {
-      document.querySelector('#toDoItemInputField').blur();
-      let largestOrderNumber = this.state.listItemsOfList.length > 0 ?
-        (this.state.listItemsOfList.map(item => item.orderNumber)).reduce((a, b) => Math.max(a, b)) : 0;
-      let newListItem = {
-        title: this.state.listItemTitleInputField.trim(),
-        orderNumber: largestOrderNumber + 1,
-        listID: this.state.listInFocus,
-        authorId: this.props.userRecordId
-      };
-      this.saveNewListItem(newListItem);
-      this.setState({
-        listItemTitleInputField: '',
-        listItemCreateModalIsVisible: false
-      });
-    }
+  handleSaveListItemClick = (data) => {
+    this.setState({listItemCreateModalIsVisible:false})
+    // if (this.state.listItemTitleInputField.length > 0) {
+    //   document.querySelector('#toDoItemInputField').blur();
+    //   let largestOrderNumber = this.state.listItemsOfList.length > 0 ?
+    //     (this.state.listItemsOfList.map(item => item.orderNumber)).reduce((a, b) => Math.max(a, b)) : 0;
+    //   let newListItem = {
+    //     title: this.state.listItemTitleInputField.trim(),
+    //     orderNumber: largestOrderNumber + 1,
+    //     listID: this.state.listInFocus,
+    //     authorId: this.props.userRecordId
+    //   };
+    //   this.saveNewListItem(newListItem);
+    //   this.setState({
+    //     listItemTitleInputField: '',
+    //     listItemCreateModalIsVisible: false
+    //   });
+    // }
   };
 
   handleSaveListClick = () => {
     let ListInput = document.querySelector('#listInputField');
     console.log('save list clicked');
-    if (this.state.listTitleInputField.length > 0) {
-      ListInput.blur();
-      this.saveNewList({
-        listTitle: this.state.listTitleInputField.trim(),
-        authorId: this.props.userRecordId
-      });
       this.setState({
         listTitleInputField: '',
         listCreateModalIsVisible: false
       });
-    }
   };
 
   handleSelectListClick = (event) => {
@@ -314,14 +311,15 @@ class Main extends Component {
                           radius='0.05' >
                     <Entity primitive='a-form' >
                       <Entity primitive='a-input'
+                              className='clickable'
                               id='listInputField'
                               disabled={!this.state.listCreateModalIsVisible}
                               position='0.25 0.6 0'
                               placeholder='Description'
                               color='black'
                               width='2'
-                              value={this.state.listTitleInputField}
-                              events={{change: (e) => this.setState({'listTitleInputField': e.detail})}} />
+                              value={this.state.cardEditDesc}
+                              events={{change: (e) => this.setState({'cardEditDesc': e.detail})}} />
                       <Entity className='clickable'
                               primitive='a-button'
                               position='2.25 0.85 0'
@@ -331,7 +329,7 @@ class Main extends Component {
                               type='raised'
                               button-color='red'
                               events={{click: () => this.handleCloseModal()}} />
-                      <SaveBtn disabled={this.state.listTitleInputField === ''}
+                      <SaveBtn 
                                position='1.57 0.25 0.01'
                                events={{click: () => this.handleSaveListClick()}} />
                     </Entity>
@@ -412,7 +410,8 @@ class Main extends Component {
                             z: 0.1
                           }}
                           data={card}
-                          laneIndex={index}></VTBCard>
+                          laneIndex={index}
+                          events={{click: () => this.handleAddListClick(card)}}></VTBCard>
                       ))
                     }
                   </VTBLane>

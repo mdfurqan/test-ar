@@ -1,7 +1,7 @@
 import React from 'react';
 import { Entity } from 'aframe-react';
 
-export const VTBCard = ({caption, children, pos, data, laneIndex}) => (
+export const VTBCard = ({caption, children, pos, data, laneIndex,events}) => (
   <Entity geometry={{
     primitive: 'box',
     depth: 0.1,
@@ -9,6 +9,10 @@ export const VTBCard = ({caption, children, pos, data, laneIndex}) => (
     width: 1.2
   }}
   position={pos}
+  className='clickable'
+  events={{
+    click: events.click
+  }}
   material={{
     color: 'white',
     opacity: 1,
@@ -23,7 +27,7 @@ export const VTBCard = ({caption, children, pos, data, laneIndex}) => (
       position={{ x: -0.57, y: 0.005, z: 0.05 }}
       material={{
         color: 'orange',
-        opacity: 1,
+        opacity: 0,
         side: 'double'
       }}/>
       <Entity position={{x: 0.13 - (laneIndex * 0.04), y: 0.2, z: 0.175}}
